@@ -20,20 +20,12 @@
             llvmPackages.openmp
             blas
             swig
-            cudaPackages.cudatoolkit
-          ];
-
-          propagatedBuildInputs = with pkgs; [
-            cmake
-            llvmPackages.openmp
-            blas
-            swig
-            cudaPackages.cudatoolkit
           ];
 
           nativeBuildInputs = with pkgs; [
             patchelf
             pkgs.autoPatchelfHook
+            cudaPackages.cudatoolkit
           ];
 
 
