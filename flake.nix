@@ -43,20 +43,22 @@
           cmakeFlags = [
             "-DFAISS_ENABLE_C_API=ON"
             "-DBUILD_SHARED_LIBS=ON"
-            "-DFAISS_ENABLE_GPU=ON"
-            "-DCMAKE_BUILD_TYPE=Release"
+            # "-DFAISS_ENABLE_GPU=ON"
+            # "-DCMAKE_BUILD_TYPE=Release"
             "-DFAISS_ENABLE_PYTHON=OFF"
           ];
 
 
           buildPhase = ''
-            make faiss_c
+            ls
+            make -j"$NIX_BUILD_CORES" faiss_c
           '';
 
           installPhase = ''
             make install
+            cp c_api/libfaiss_c.so $out/lib
+            patchelf --set-rpath '$ORIGIN/../lib' $out/lib/libfaiss_c.so
           '';
-
         });
 
         devShells.default =
