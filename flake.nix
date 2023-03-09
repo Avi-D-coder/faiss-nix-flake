@@ -15,8 +15,6 @@
 
         # Common derivation arguments used for all builds
         commonArgs = {
-          src = ./.;
-
           buildInputs = with pkgs; [
             # Add necessary build inputs here
             cmake
@@ -36,7 +34,7 @@
         };
       in
       {
-        packages.default = pkgs.stdenv.mkDerivation {
+        packages.default = pkgs.stdenv.mkDerivation (commonArgs // {
           pname = "faiss-c-lib";
           version = "0.1.0";
 
@@ -50,9 +48,16 @@
             "-DFAISS_ENABLE_PYTHON=OFF"
           ];
 
-          buildInputs = commonArgs.buildInputs;
-          nativeBuildInputs = commonArgs.nativeBuildInputs;
-        };
+
+          buildPhase = ''
+            make faiss_c
+          '';
+
+          installPhase = ''
+            make install
+          '';
+
+        });
 
         devShells.default =
           pkgs.mkShell (commonArgs // { });
