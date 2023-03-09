@@ -31,6 +31,12 @@
             cudaPackages.cudatoolkit
           ];
 
+          nativeBuildInputs = with pkgs; [
+            patchelf
+            pkgs.autoPatchelfHook
+          ];
+
+
           LD_LIBRARY_PATH = pkgs.lib.makeLibraryPath commonArgs.buildInputs;
           LIBCLANG_PATH = "${pkgs.llvmPackages.libclang.lib}/lib";
         };
@@ -52,8 +58,8 @@
 
 
           buildPhase = ''
-            make faiss
-            make faiss_c
+            make -j faiss
+            make -j faiss_c
           '';
 
           installPhase = ''
