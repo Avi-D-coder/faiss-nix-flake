@@ -21,12 +21,7 @@
             llvmPackages.openmp
             blas
             swig
-          ];
-
-          nativeBuildInputs = with pkgs; [
-            # Add necessary native build inputs here
             cudaPackages.cudatoolkit
-            addOpenGLRunpath
           ];
 
           LD_LIBRARY_PATH = pkgs.lib.makeLibraryPath commonArgs.buildInputs;
@@ -36,15 +31,15 @@
       {
         packages.default = pkgs.stdenv.mkDerivation (commonArgs // {
           pname = "faiss-c-lib";
-          version = "0.1.0";
+          version = "1.7.3";
 
           src = ./.;
 
           cmakeFlags = [
             "-DFAISS_ENABLE_C_API=ON"
             "-DBUILD_SHARED_LIBS=ON"
-            # "-DFAISS_ENABLE_GPU=ON"
-            # "-DCMAKE_BUILD_TYPE=Release"
+            "-DFAISS_ENABLE_GPU=ON"
+            "-DCMAKE_BUILD_TYPE=Release"
             "-DFAISS_ENABLE_PYTHON=OFF"
           ];
 
