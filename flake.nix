@@ -24,6 +24,8 @@
             cudaPackages.cudatoolkit
           ];
 
+          propagatedBuildInputs = with pkgs; [ cudaPackages.cudatoolkit ];
+
           LD_LIBRARY_PATH = pkgs.lib.makeLibraryPath commonArgs.buildInputs;
           LIBCLANG_PATH = "${pkgs.llvmPackages.libclang.lib}/lib";
         };
