@@ -16,7 +16,6 @@
         # Common derivation arguments used for all builds
         commonArgs = {
           buildInputs = with pkgs; [
-            # Add necessary build inputs here
             cmake
             llvmPackages.openmp
             blas
@@ -24,7 +23,13 @@
             cudaPackages.cudatoolkit
           ];
 
-          propagatedBuildInputs = with pkgs; [ cudaPackages.cudatoolkit ];
+          propagatedBuildInputs = with pkgs; [
+            cmake
+            llvmPackages.openmp
+            blas
+            swig
+            cudaPackages.cudatoolkit
+          ];
 
           LD_LIBRARY_PATH = pkgs.lib.makeLibraryPath commonArgs.buildInputs;
           LIBCLANG_PATH = "${pkgs.llvmPackages.libclang.lib}/lib";
@@ -47,13 +52,15 @@
 
 
           buildPhase = ''
-            ls
-            make -j"$NIX_BUILD_CORES" faiss_c
+            make faiss
+            make faiss_c
           '';
 
           installPhase = ''
             make install
-            cp c_api/libfaiss_c.so $out/lib
+            cd c_api
+            make install
+            cp libfaiss_c.so $out/lib
             patchelf --set-rpath '$ORIGIN/../lib' $out/lib/libfaiss_c.so
           '';
         });
